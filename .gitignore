@@ -13,6 +13,7 @@ dSYM
 *.xcuserstate
 project.xcworkspace/
 xcuserdata/
+Example/Pods/
 
 # Generated files
 *.o
