@@ -33,9 +33,9 @@ static const CGFloat NYTPhotoDismissalInteractionControllerReturnToCenterVelocit
     
     CGFloat verticalDelta = newCenterPoint.y - anchorPoint.y;
     
-    CGFloat backgroundAlpha = [self backgroundAlphaForPanningWithVerticalDelta:verticalDelta];
-    fromView.backgroundColor = [fromView.backgroundColor colorWithAlphaComponent:backgroundAlpha];
-    
+//    CGFloat backgroundAlpha = [self backgroundAlphaForPanningWithVerticalDelta:verticalDelta];
+//    fromView.backgroundColor = [fromView.backgroundColor colorWithAlphaComponent:backgroundAlpha];
+//    
     if (panGestureRecognizer.state == UIGestureRecognizerStateEnded) {
         [self finishPanWithPanGestureRecognizer:panGestureRecognizer verticalDelta:verticalDelta viewToPan:viewToPan anchorPoint:anchorPoint];
     }
@@ -82,7 +82,7 @@ static const CGFloat NYTPhotoDismissalInteractionControllerReturnToCenterVelocit
         [UIView animateWithDuration:animationDuration delay:0 options:animationCurve animations:^{
             viewToPan.center = finalPageViewCenterPoint;
             
-            fromView.backgroundColor = [fromView.backgroundColor colorWithAlphaComponent:finalBackgroundAlpha];
+//            fromView.backgroundColor = [fromView.backgroundColor colorWithAlphaComponent:finalBackgroundAlpha];
         } completion:^(BOOL finished) {
             if (isDismissing) {
                 [self.transitionContext finishInteractiveTransition];

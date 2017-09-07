@@ -55,6 +55,10 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @property (nonatomic, nullable) UIView *captionView;
 
+@property (nonatomic,strong) UIButton* cancelBtn;
+
+@property (nonatomic,strong) void(^cancelOperation)();
+
 @end
 
 NS_ASSUME_NONNULL_END

@@ -17,6 +17,20 @@
 
 @implementation NYTPhotosOverlayView
 
+-(UIButton*)cancelBtn
+{
+    if(!_cancelBtn)
+    {
+        CGFloat screenWidth = [[UIScreen mainScreen] bounds].size.width;
+        
+        _cancelBtn = [[UIButton alloc]initWithFrame:CGRectMake(screenWidth/2, 50, 80, 80)];
+        [_cancelBtn  setImage:[UIImage imageNamed:@"ic_closeView"] forState:UIControlStateNormal];
+        [_cancelBtn  setCenter:CGPointMake(screenWidth/2, 30)];
+
+    }
+    return _cancelBtn;
+}
+
 #pragma mark - UIView
 
 - (instancetype)initWithFrame:(CGRect)frame {
@@ -90,7 +104,27 @@
     NSLayoutConstraint *bottomConstraint = [NSLayoutConstraint constraintWithItem:self.captionView attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeBottom multiplier:1.0 constant:0.0];
     NSLayoutConstraint *widthConstraint = [NSLayoutConstraint constraintWithItem:self.captionView attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeWidth multiplier:1.0 constant:0.0];
     NSLayoutConstraint *horizontalPositionConstraint = [NSLayoutConstraint constraintWithItem:self.captionView attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeCenterX multiplier:1.0 constant:0.0];
-    [self addConstraints:@[bottomConstraint, widthConstraint, horizontalPositionConstraint]];
+    
+        NSLayoutConstraint *heightConstraint = [NSLayoutConstraint
+                                                 constraintWithItem:self.captionView
+                                                 attribute:NSLayoutAttributeHeight
+                                                 relatedBy:NSLayoutRelationGreaterThanOrEqual
+                                                 toItem:nil
+                                                 attribute:NSLayoutAttributeNotAnAttribute
+                                                 multiplier:1
+                                                 constant:150];
+    [self addConstraints:@[bottomConstraint, widthConstraint, horizontalPositionConstraint,heightConstraint]];
+    
+    [self.captionView addSubview:self.cancelBtn ];
+    
+    UITapGestureRecognizer* tapGesture = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(tapCancelled:)];
+    [self.captionView addGestureRecognizer:tapGesture];
+}
+
+-(void)tapCancelled:(UITapGestureRecognizer*)tapGesture
+{
+    if(self.cancelOperation)
+        self.cancelOperation();
 }
 
 - (UIBarButtonItem *)leftBarButtonItem {

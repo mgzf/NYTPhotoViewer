@@ -9,6 +9,7 @@
 #import "NYTPhotoViewController.h"
 #import "NYTPhoto.h"
 #import "NYTScalingImageView.h"
+#import "GalleryPhoto.h"
 
 NSString * const NYTPhotoViewControllerPhotoImageUpdatedNotification = @"NYTPhotoViewControllerPhotoImageUpdatedNotification";
 
@@ -32,7 +33,7 @@ NSString * const NYTPhotoViewControllerPhotoImageUpdatedNotification = @"NYTPhot
 
 - (void)dealloc {
     _scalingImageView.delegate = nil;
-    
+    [((GalleryPhoto *)self.photo) removeObserver:self forKeyPath:@"image"];
     [_notificationCenter removeObserver:self];
 }
 
@@ -103,6 +104,14 @@ NSString * const NYTPhotoViewControllerPhotoImageUpdatedNotification = @"NYTPhot
     _notificationCenter = notificationCenter;
 
     [self setupGestureRecognizers];
+    
+    [((GalleryPhoto *)self.photo) addObserver:self forKeyPath:@"image" options:NSKeyValueObservingOptionNew context:nil];
+}
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSKeyValueChangeKey,id> *)change context:(void *)context {
+    if ([keyPath isEqualToString:@"image"]) {
+        [self updateImage:[_photo image]];
+    }
 }
 
 - (void)setupLoadingView:(UIView *)loadingView {
