@@ -9,6 +9,8 @@
 #import "NYTPhotoViewController.h"
 #import "NYTPhoto.h"
 #import "NYTScalingImageView.h"
+#import "GalleryPhotoView.h"
+#import <ReactiveCocoa/ReactiveCocoa.h>
 
 NSString * const NYTPhotoViewControllerPhotoImageUpdatedNotification = @"NYTPhotoViewControllerPhotoImageUpdatedNotification";
 
@@ -23,15 +25,34 @@ NSString * const NYTPhotoViewControllerPhotoImageUpdatedNotification = @"NYTPhot
 @property (nonatomic) NSNotificationCenter *notificationCenter;
 @property (nonatomic) UITapGestureRecognizer *doubleTapGestureRecognizer;
 @property (nonatomic) UILongPressGestureRecognizer *longPressGestureRecognizer;
-
+@property (nonatomic, strong) UIImageView *watermarkImage;
 @end
 
 @implementation NYTPhotoViewController
 
 #pragma mark - NSObject
 
+- (UIImageView *)watermarkImage {
+    if (!_watermarkImage) {
+        _watermarkImage = [[UIImageView alloc] init];
+        _watermarkImage.image = [UIImage imageNamed:@"蘑菇月付专用水印"];
+    }
+    return _watermarkImage;
+}
+- (void)setShowWatermarkImage:(BOOL)showWatermarkImage {
+    _showWatermarkImage = showWatermarkImage;
+    if (showWatermarkImage) {
+        [self.scalingImageView addSubview:self.watermarkImage];
+    } else if (_watermarkImage) {
+        [self.watermarkImage removeFromSuperview];
+    }
+}
+
 - (void)dealloc {
     _scalingImageView.delegate = nil;
+    if ([NSStringFromClass([self.photo class]) containsString:@"GalleryPhotoView"]) {
+//        [self.photo removeObserver:self forKeyPath:@"image"];
+    }
     
     [_notificationCenter removeObserver:self];
 }
@@ -59,7 +80,10 @@ NSString * const NYTPhotoViewControllerPhotoImageUpdatedNotification = @"NYTPhot
     
     self.scalingImageView.frame = self.view.bounds;
     [self.view addSubview:self.scalingImageView];
-    
+    if (self.showWatermarkImage) {
+        [self.scalingImageView.imageView addSubview:self.watermarkImage];
+        RAC(self.watermarkImage, frame) = RACObserve(self.scalingImageView.imageView, bounds);
+    }
     [self.view addSubview:self.loadingView];
     [self.loadingView sizeToFit];
     
@@ -103,6 +127,16 @@ NSString * const NYTPhotoViewControllerPhotoImageUpdatedNotification = @"NYTPhot
     _notificationCenter = notificationCenter;
 
     [self setupGestureRecognizers];
+    
+    if ([self.photo isKindOfClass:[GalleryPhotoView class]]) {
+         [((GalleryPhotoView *)self.photo) addObserver:self forKeyPath:@"image" options:NSKeyValueObservingOptionNew context:nil];
+    }
+}
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSKeyValueChangeKey,id> *)change context:(void *)context {
+    if ([keyPath isEqualToString:@"image"]) {
+        [self updateImage:[_photo image]];
+    }
 }
 
 - (void)setupLoadingView:(UIView *)loadingView {

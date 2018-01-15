@@ -24,6 +24,9 @@ extern NSString * const NYTPhotoViewControllerPhotoImageUpdatedNotification;
  */
 @interface NYTPhotoViewController : UIViewController <NYTPhotoContainer>
 
+// 4.0.0 Ann add. 月付水印
+@property (nonatomic) BOOL showWatermarkImage;
+
 /**
  *  The internal scaling image view used to display the photo.
  */

@@ -6,7 +6,8 @@
 //  Copyright (c) 2015 NYTimes. All rights reserved.
 //
 
-@import UIKit;
+//@import UIKit;
+#import <UIKit/UIKit.h>
 
 @class NYTPhotosOverlayView;
 
@@ -21,6 +22,9 @@ extern NSString * const NYTPhotosViewControllerWillDismissNotification;
 extern NSString * const NYTPhotosViewControllerDidDismissNotification;
 
 @interface NYTPhotosViewController : UIViewController
+
+// 4.0.0 Ann add. 月付水印
+@property (nonatomic) BOOL showWatermarkImage;
 
 /**
  *  The pan gesture recognizer used for panning to dismiss the photo. Disable to stop the pan-to-dismiss behavior.
@@ -50,7 +54,7 @@ extern NSString * const NYTPhotosViewControllerDidDismissNotification;
 /**
  *  The left bar button item overlaying the photo.
  */
-@property (nonatomic, nullable) UIBarButtonItem *leftBarButtonItem;
+@property (nonatomic, nullable, retain) UIBarButtonItem *leftBarButtonItem;
 
 /**
  *  The left bar button items overlaying the photo.
@@ -60,7 +64,7 @@ extern NSString * const NYTPhotosViewControllerDidDismissNotification;
 /**
  *  The right bar button item overlaying the photo.
  */
-@property (nonatomic, nullable) UIBarButtonItem *rightBarButtonItem;
+@property (nonatomic, nullable, retain) UIBarButtonItem *rightBarButtonItem;
 
 /**
  *  The right bar button items overlaying the photo.
@@ -80,6 +84,8 @@ extern NSString * const NYTPhotosViewControllerDidDismissNotification;
  *  @return A fully initialized object.
  */
 - (instancetype)initWithPhotos:(NSArray <id <NYTPhoto>> * _Nullable)photos;
+
+- (instancetype)initWithPhotos:(NSArray <id <NYTPhoto>> * _Nullable)photos showWaterMark:(BOOL)showWatermarkImage;
 
 /**
  *  The designated initializer that stores the array of objects conforming to the `NYTPhoto` protocol for display, along with specifying an initial photo for display.

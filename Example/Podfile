@@ -1,19 +1,19 @@
 source 'https://github.com/CocoaPods/Specs.git'
 
-target 'NYTPhotoViewer', :exclusive => true do
+target 'NYTPhotoViewer' do
   pod "NYTPhotoViewer", :path => "../"
 end
 
-target 'Tests', :exclusive => true do
+target 'Tests' do
   pod "NYTPhotoViewer", :path => "../"
   pod 'OCMock', '~> 3.2'
 end
 
-target 'NYTPhotoViewer-Swift', :exclusive => true do
+target 'NYTPhotoViewer-Swift' do
     pod "NYTPhotoViewer", :path => "../"
 end
 
-target 'NYTPhotoViewer-SwiftTests', :exclusive => true do
+target 'NYTPhotoViewer-SwiftTests' do
     pod "NYTPhotoViewer", :path => "../"
     pod 'OCMock', '~> 3.2'
 end
