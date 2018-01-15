@@ -18,6 +18,7 @@ xcuserdata/
 *.o
 *.pyc
 *.hi
+Pods/
 
 #Python modules
 MANIFEST
