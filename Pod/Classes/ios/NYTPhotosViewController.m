@@ -6,7 +6,6 @@
 //  Copyright (c) 2015 NYTimes. All rights reserved.
 //
 
-//#import "KitchenDefinitions.h"
 #import "NYTPhoto.h"
 #import "NYTPhotoCaptionView.h"
 #import "NYTPhotoTransitionController.h"
